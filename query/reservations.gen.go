@@ -33,7 +33,6 @@ func newReservation(db *gorm.DB, opts ...gen.DOOption) reservation {
 	_reservation.DeletedAt = field.NewField(tableName, "deleted_at")
 	_reservation.GuildID = field.NewString(tableName, "guild_id")
 	_reservation.ChannelID = field.NewString(tableName, "channel_id")
-	_reservation.GameID = field.NewString(tableName, "game_id")
 
 	_reservation.fillFieldMap()
 
@@ -50,7 +49,6 @@ type reservation struct {
 	DeletedAt field.Field
 	GuildID   field.String
 	ChannelID field.String
-	GameID    field.String
 
 	fieldMap map[string]field.Expr
 }
@@ -73,7 +71,6 @@ func (r *reservation) updateTableName(table string) *reservation {
 	r.DeletedAt = field.NewField(table, "deleted_at")
 	r.GuildID = field.NewString(table, "guild_id")
 	r.ChannelID = field.NewString(table, "channel_id")
-	r.GameID = field.NewString(table, "game_id")
 
 	r.fillFieldMap()
 
@@ -90,14 +87,13 @@ func (r *reservation) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (r *reservation) fillFieldMap() {
-	r.fieldMap = make(map[string]field.Expr, 7)
+	r.fieldMap = make(map[string]field.Expr, 6)
 	r.fieldMap["id"] = r.ID
 	r.fieldMap["created_at"] = r.CreatedAt
 	r.fieldMap["updated_at"] = r.UpdatedAt
 	r.fieldMap["deleted_at"] = r.DeletedAt
 	r.fieldMap["guild_id"] = r.GuildID
 	r.fieldMap["channel_id"] = r.ChannelID
-	r.fieldMap["game_id"] = r.GameID
 }
 
 func (r reservation) clone(db *gorm.DB) reservation {

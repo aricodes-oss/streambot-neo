@@ -16,39 +16,49 @@ import (
 )
 
 var (
-	Q           = new(Query)
-	Reservation *reservation
-	Stream      *stream
+	Q                    = new(Query)
+	BlacklistedUsers     *blacklistedUsers
+	GameSubscriptions    *gameSubscriptions
+	Reservation          *reservation
+	YoutubeSubscriptions *youtubeSubscriptions
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	BlacklistedUsers = &Q.BlacklistedUsers
+	GameSubscriptions = &Q.GameSubscriptions
 	Reservation = &Q.Reservation
-	Stream = &Q.Stream
+	YoutubeSubscriptions = &Q.YoutubeSubscriptions
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:          db,
-		Reservation: newReservation(db, opts...),
-		Stream:      newStream(db, opts...),
+		db:                   db,
+		BlacklistedUsers:     newBlacklistedUsers(db, opts...),
+		GameSubscriptions:    newGameSubscriptions(db, opts...),
+		Reservation:          newReservation(db, opts...),
+		YoutubeSubscriptions: newYoutubeSubscriptions(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Reservation reservation
-	Stream      stream
+	BlacklistedUsers     blacklistedUsers
+	GameSubscriptions    gameSubscriptions
+	Reservation          reservation
+	YoutubeSubscriptions youtubeSubscriptions
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:          db,
-		Reservation: q.Reservation.clone(db),
-		Stream:      q.Stream.clone(db),
+		db:                   db,
+		BlacklistedUsers:     q.BlacklistedUsers.clone(db),
+		GameSubscriptions:    q.GameSubscriptions.clone(db),
+		Reservation:          q.Reservation.clone(db),
+		YoutubeSubscriptions: q.YoutubeSubscriptions.clone(db),
 	}
 }
 
@@ -62,21 +72,27 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:          db,
-		Reservation: q.Reservation.replaceDB(db),
-		Stream:      q.Stream.replaceDB(db),
+		db:                   db,
+		BlacklistedUsers:     q.BlacklistedUsers.replaceDB(db),
+		GameSubscriptions:    q.GameSubscriptions.replaceDB(db),
+		Reservation:          q.Reservation.replaceDB(db),
+		YoutubeSubscriptions: q.YoutubeSubscriptions.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Reservation IReservationDo
-	Stream      IStreamDo
+	BlacklistedUsers     IBlacklistedUsersDo
+	GameSubscriptions    IGameSubscriptionsDo
+	Reservation          IReservationDo
+	YoutubeSubscriptions IYoutubeSubscriptionsDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Reservation: q.Reservation.WithContext(ctx),
-		Stream:      q.Stream.WithContext(ctx),
+		BlacklistedUsers:     q.BlacklistedUsers.WithContext(ctx),
+		GameSubscriptions:    q.GameSubscriptions.WithContext(ctx),
+		Reservation:          q.Reservation.WithContext(ctx),
+		YoutubeSubscriptions: q.YoutubeSubscriptions.WithContext(ctx),
 	}
 }
 
