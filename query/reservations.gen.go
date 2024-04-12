@@ -33,7 +33,23 @@ func newReservation(db *gorm.DB, opts ...gen.DOOption) reservation {
 	_reservation.DeletedAt = field.NewField(tableName, "deleted_at")
 	_reservation.GuildID = field.NewString(tableName, "guild_id")
 	_reservation.ChannelID = field.NewString(tableName, "channel_id")
-	_reservation.GameID = field.NewString(tableName, "game_id")
+	_reservation.GameSubscriptions = reservationHasManyGameSubscriptions{
+		db: db.Session(&gorm.Session{}),
+
+		RelationField: field.NewRelation("GameSubscriptions", "models.GameSubscription"),
+	}
+
+	_reservation.YoutubeSubscriptions = reservationHasManyYoutubeSubscriptions{
+		db: db.Session(&gorm.Session{}),
+
+		RelationField: field.NewRelation("YoutubeSubscriptions", "models.YoutubeSubscription"),
+	}
+
+	_reservation.BlacklistedUsers = reservationHasManyBlacklistedUsers{
+		db: db.Session(&gorm.Session{}),
+
+		RelationField: field.NewRelation("BlacklistedUsers", "models.BlacklistedUser"),
+	}
 
 	_reservation.fillFieldMap()
 
@@ -43,14 +59,18 @@ func newReservation(db *gorm.DB, opts ...gen.DOOption) reservation {
 type reservation struct {
 	reservationDo
 
-	ALL       field.Asterisk
-	ID        field.Uint
-	CreatedAt field.Time
-	UpdatedAt field.Time
-	DeletedAt field.Field
-	GuildID   field.String
-	ChannelID field.String
-	GameID    field.String
+	ALL               field.Asterisk
+	ID                field.Uint
+	CreatedAt         field.Time
+	UpdatedAt         field.Time
+	DeletedAt         field.Field
+	GuildID           field.String
+	ChannelID         field.String
+	GameSubscriptions reservationHasManyGameSubscriptions
+
+	YoutubeSubscriptions reservationHasManyYoutubeSubscriptions
+
+	BlacklistedUsers reservationHasManyBlacklistedUsers
 
 	fieldMap map[string]field.Expr
 }
@@ -73,7 +93,6 @@ func (r *reservation) updateTableName(table string) *reservation {
 	r.DeletedAt = field.NewField(table, "deleted_at")
 	r.GuildID = field.NewString(table, "guild_id")
 	r.ChannelID = field.NewString(table, "channel_id")
-	r.GameID = field.NewString(table, "game_id")
 
 	r.fillFieldMap()
 
@@ -90,14 +109,14 @@ func (r *reservation) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (r *reservation) fillFieldMap() {
-	r.fieldMap = make(map[string]field.Expr, 7)
+	r.fieldMap = make(map[string]field.Expr, 9)
 	r.fieldMap["id"] = r.ID
 	r.fieldMap["created_at"] = r.CreatedAt
 	r.fieldMap["updated_at"] = r.UpdatedAt
 	r.fieldMap["deleted_at"] = r.DeletedAt
 	r.fieldMap["guild_id"] = r.GuildID
 	r.fieldMap["channel_id"] = r.ChannelID
-	r.fieldMap["game_id"] = r.GameID
+
 }
 
 func (r reservation) clone(db *gorm.DB) reservation {
@@ -108,6 +127,219 @@ func (r reservation) clone(db *gorm.DB) reservation {
 func (r reservation) replaceDB(db *gorm.DB) reservation {
 	r.reservationDo.ReplaceDB(db)
 	return r
+}
+
+type reservationHasManyGameSubscriptions struct {
+	db *gorm.DB
+
+	field.RelationField
+}
+
+func (a reservationHasManyGameSubscriptions) Where(conds ...field.Expr) *reservationHasManyGameSubscriptions {
+	if len(conds) == 0 {
+		return &a
+	}
+
+	exprs := make([]clause.Expression, 0, len(conds))
+	for _, cond := range conds {
+		exprs = append(exprs, cond.BeCond().(clause.Expression))
+	}
+	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
+	return &a
+}
+
+func (a reservationHasManyGameSubscriptions) WithContext(ctx context.Context) *reservationHasManyGameSubscriptions {
+	a.db = a.db.WithContext(ctx)
+	return &a
+}
+
+func (a reservationHasManyGameSubscriptions) Session(session *gorm.Session) *reservationHasManyGameSubscriptions {
+	a.db = a.db.Session(session)
+	return &a
+}
+
+func (a reservationHasManyGameSubscriptions) Model(m *models.Reservation) *reservationHasManyGameSubscriptionsTx {
+	return &reservationHasManyGameSubscriptionsTx{a.db.Model(m).Association(a.Name())}
+}
+
+type reservationHasManyGameSubscriptionsTx struct{ tx *gorm.Association }
+
+func (a reservationHasManyGameSubscriptionsTx) Find() (result []*models.GameSubscription, err error) {
+	return result, a.tx.Find(&result)
+}
+
+func (a reservationHasManyGameSubscriptionsTx) Append(values ...*models.GameSubscription) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Append(targetValues...)
+}
+
+func (a reservationHasManyGameSubscriptionsTx) Replace(values ...*models.GameSubscription) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Replace(targetValues...)
+}
+
+func (a reservationHasManyGameSubscriptionsTx) Delete(values ...*models.GameSubscription) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Delete(targetValues...)
+}
+
+func (a reservationHasManyGameSubscriptionsTx) Clear() error {
+	return a.tx.Clear()
+}
+
+func (a reservationHasManyGameSubscriptionsTx) Count() int64 {
+	return a.tx.Count()
+}
+
+type reservationHasManyYoutubeSubscriptions struct {
+	db *gorm.DB
+
+	field.RelationField
+}
+
+func (a reservationHasManyYoutubeSubscriptions) Where(conds ...field.Expr) *reservationHasManyYoutubeSubscriptions {
+	if len(conds) == 0 {
+		return &a
+	}
+
+	exprs := make([]clause.Expression, 0, len(conds))
+	for _, cond := range conds {
+		exprs = append(exprs, cond.BeCond().(clause.Expression))
+	}
+	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
+	return &a
+}
+
+func (a reservationHasManyYoutubeSubscriptions) WithContext(ctx context.Context) *reservationHasManyYoutubeSubscriptions {
+	a.db = a.db.WithContext(ctx)
+	return &a
+}
+
+func (a reservationHasManyYoutubeSubscriptions) Session(session *gorm.Session) *reservationHasManyYoutubeSubscriptions {
+	a.db = a.db.Session(session)
+	return &a
+}
+
+func (a reservationHasManyYoutubeSubscriptions) Model(m *models.Reservation) *reservationHasManyYoutubeSubscriptionsTx {
+	return &reservationHasManyYoutubeSubscriptionsTx{a.db.Model(m).Association(a.Name())}
+}
+
+type reservationHasManyYoutubeSubscriptionsTx struct{ tx *gorm.Association }
+
+func (a reservationHasManyYoutubeSubscriptionsTx) Find() (result []*models.YoutubeSubscription, err error) {
+	return result, a.tx.Find(&result)
+}
+
+func (a reservationHasManyYoutubeSubscriptionsTx) Append(values ...*models.YoutubeSubscription) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Append(targetValues...)
+}
+
+func (a reservationHasManyYoutubeSubscriptionsTx) Replace(values ...*models.YoutubeSubscription) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Replace(targetValues...)
+}
+
+func (a reservationHasManyYoutubeSubscriptionsTx) Delete(values ...*models.YoutubeSubscription) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Delete(targetValues...)
+}
+
+func (a reservationHasManyYoutubeSubscriptionsTx) Clear() error {
+	return a.tx.Clear()
+}
+
+func (a reservationHasManyYoutubeSubscriptionsTx) Count() int64 {
+	return a.tx.Count()
+}
+
+type reservationHasManyBlacklistedUsers struct {
+	db *gorm.DB
+
+	field.RelationField
+}
+
+func (a reservationHasManyBlacklistedUsers) Where(conds ...field.Expr) *reservationHasManyBlacklistedUsers {
+	if len(conds) == 0 {
+		return &a
+	}
+
+	exprs := make([]clause.Expression, 0, len(conds))
+	for _, cond := range conds {
+		exprs = append(exprs, cond.BeCond().(clause.Expression))
+	}
+	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
+	return &a
+}
+
+func (a reservationHasManyBlacklistedUsers) WithContext(ctx context.Context) *reservationHasManyBlacklistedUsers {
+	a.db = a.db.WithContext(ctx)
+	return &a
+}
+
+func (a reservationHasManyBlacklistedUsers) Session(session *gorm.Session) *reservationHasManyBlacklistedUsers {
+	a.db = a.db.Session(session)
+	return &a
+}
+
+func (a reservationHasManyBlacklistedUsers) Model(m *models.Reservation) *reservationHasManyBlacklistedUsersTx {
+	return &reservationHasManyBlacklistedUsersTx{a.db.Model(m).Association(a.Name())}
+}
+
+type reservationHasManyBlacklistedUsersTx struct{ tx *gorm.Association }
+
+func (a reservationHasManyBlacklistedUsersTx) Find() (result []*models.BlacklistedUser, err error) {
+	return result, a.tx.Find(&result)
+}
+
+func (a reservationHasManyBlacklistedUsersTx) Append(values ...*models.BlacklistedUser) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Append(targetValues...)
+}
+
+func (a reservationHasManyBlacklistedUsersTx) Replace(values ...*models.BlacklistedUser) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Replace(targetValues...)
+}
+
+func (a reservationHasManyBlacklistedUsersTx) Delete(values ...*models.BlacklistedUser) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Delete(targetValues...)
+}
+
+func (a reservationHasManyBlacklistedUsersTx) Clear() error {
+	return a.tx.Clear()
+}
+
+func (a reservationHasManyBlacklistedUsersTx) Count() int64 {
+	return a.tx.Count()
 }
 
 type reservationDo struct{ gen.DO }
