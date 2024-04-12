@@ -4,12 +4,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type BlacklistedUsers struct {
+type BlacklistedUser struct {
 	gorm.Model
 	ReservationID int
 	UserID        string
 }
 
 func init() {
-	AllModels = append(AllModels, BlacklistedUsers{})
+	AllModels = append(AllModels, BlacklistedUser{})
 }

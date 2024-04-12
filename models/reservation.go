@@ -6,8 +6,11 @@ import (
 
 type Reservation struct {
 	gorm.Model
-	GuildID   string
-	ChannelID string
+	GuildID              string
+	ChannelID            string
+	GameSubscriptions    []GameSubscription
+	YoutubeSubscriptions []YoutubeSubscription
+	BlacklistedUsers     []BlacklistedUser
 }
 
 func init() {

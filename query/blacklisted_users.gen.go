@@ -19,28 +19,28 @@ import (
 	"streambot/models"
 )
 
-func newBlacklistedUsers(db *gorm.DB, opts ...gen.DOOption) blacklistedUsers {
-	_blacklistedUsers := blacklistedUsers{}
+func newBlacklistedUser(db *gorm.DB, opts ...gen.DOOption) blacklistedUser {
+	_blacklistedUser := blacklistedUser{}
 
-	_blacklistedUsers.blacklistedUsersDo.UseDB(db, opts...)
-	_blacklistedUsers.blacklistedUsersDo.UseModel(&models.BlacklistedUsers{})
+	_blacklistedUser.blacklistedUserDo.UseDB(db, opts...)
+	_blacklistedUser.blacklistedUserDo.UseModel(&models.BlacklistedUser{})
 
-	tableName := _blacklistedUsers.blacklistedUsersDo.TableName()
-	_blacklistedUsers.ALL = field.NewAsterisk(tableName)
-	_blacklistedUsers.ID = field.NewUint(tableName, "id")
-	_blacklistedUsers.CreatedAt = field.NewTime(tableName, "created_at")
-	_blacklistedUsers.UpdatedAt = field.NewTime(tableName, "updated_at")
-	_blacklistedUsers.DeletedAt = field.NewField(tableName, "deleted_at")
-	_blacklistedUsers.ReservationID = field.NewInt(tableName, "reservation_id")
-	_blacklistedUsers.UserID = field.NewString(tableName, "user_id")
+	tableName := _blacklistedUser.blacklistedUserDo.TableName()
+	_blacklistedUser.ALL = field.NewAsterisk(tableName)
+	_blacklistedUser.ID = field.NewUint(tableName, "id")
+	_blacklistedUser.CreatedAt = field.NewTime(tableName, "created_at")
+	_blacklistedUser.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_blacklistedUser.DeletedAt = field.NewField(tableName, "deleted_at")
+	_blacklistedUser.ReservationID = field.NewInt(tableName, "reservation_id")
+	_blacklistedUser.UserID = field.NewString(tableName, "user_id")
 
-	_blacklistedUsers.fillFieldMap()
+	_blacklistedUser.fillFieldMap()
 
-	return _blacklistedUsers
+	return _blacklistedUser
 }
 
-type blacklistedUsers struct {
-	blacklistedUsersDo
+type blacklistedUser struct {
+	blacklistedUserDo
 
 	ALL           field.Asterisk
 	ID            field.Uint
@@ -53,17 +53,17 @@ type blacklistedUsers struct {
 	fieldMap map[string]field.Expr
 }
 
-func (b blacklistedUsers) Table(newTableName string) *blacklistedUsers {
-	b.blacklistedUsersDo.UseTable(newTableName)
+func (b blacklistedUser) Table(newTableName string) *blacklistedUser {
+	b.blacklistedUserDo.UseTable(newTableName)
 	return b.updateTableName(newTableName)
 }
 
-func (b blacklistedUsers) As(alias string) *blacklistedUsers {
-	b.blacklistedUsersDo.DO = *(b.blacklistedUsersDo.As(alias).(*gen.DO))
+func (b blacklistedUser) As(alias string) *blacklistedUser {
+	b.blacklistedUserDo.DO = *(b.blacklistedUserDo.As(alias).(*gen.DO))
 	return b.updateTableName(alias)
 }
 
-func (b *blacklistedUsers) updateTableName(table string) *blacklistedUsers {
+func (b *blacklistedUser) updateTableName(table string) *blacklistedUser {
 	b.ALL = field.NewAsterisk(table)
 	b.ID = field.NewUint(table, "id")
 	b.CreatedAt = field.NewTime(table, "created_at")
@@ -77,7 +77,7 @@ func (b *blacklistedUsers) updateTableName(table string) *blacklistedUsers {
 	return b
 }
 
-func (b *blacklistedUsers) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
+func (b *blacklistedUser) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 	_f, ok := b.fieldMap[fieldName]
 	if !ok || _f == nil {
 		return nil, false
@@ -86,7 +86,7 @@ func (b *blacklistedUsers) GetFieldByName(fieldName string) (field.OrderExpr, bo
 	return _oe, ok
 }
 
-func (b *blacklistedUsers) fillFieldMap() {
+func (b *blacklistedUser) fillFieldMap() {
 	b.fieldMap = make(map[string]field.Expr, 6)
 	b.fieldMap["id"] = b.ID
 	b.fieldMap["created_at"] = b.CreatedAt
@@ -96,58 +96,58 @@ func (b *blacklistedUsers) fillFieldMap() {
 	b.fieldMap["user_id"] = b.UserID
 }
 
-func (b blacklistedUsers) clone(db *gorm.DB) blacklistedUsers {
-	b.blacklistedUsersDo.ReplaceConnPool(db.Statement.ConnPool)
+func (b blacklistedUser) clone(db *gorm.DB) blacklistedUser {
+	b.blacklistedUserDo.ReplaceConnPool(db.Statement.ConnPool)
 	return b
 }
 
-func (b blacklistedUsers) replaceDB(db *gorm.DB) blacklistedUsers {
-	b.blacklistedUsersDo.ReplaceDB(db)
+func (b blacklistedUser) replaceDB(db *gorm.DB) blacklistedUser {
+	b.blacklistedUserDo.ReplaceDB(db)
 	return b
 }
 
-type blacklistedUsersDo struct{ gen.DO }
+type blacklistedUserDo struct{ gen.DO }
 
-type IBlacklistedUsersDo interface {
+type IBlacklistedUserDo interface {
 	gen.SubQuery
-	Debug() IBlacklistedUsersDo
-	WithContext(ctx context.Context) IBlacklistedUsersDo
+	Debug() IBlacklistedUserDo
+	WithContext(ctx context.Context) IBlacklistedUserDo
 	WithResult(fc func(tx gen.Dao)) gen.ResultInfo
 	ReplaceDB(db *gorm.DB)
-	ReadDB() IBlacklistedUsersDo
-	WriteDB() IBlacklistedUsersDo
+	ReadDB() IBlacklistedUserDo
+	WriteDB() IBlacklistedUserDo
 	As(alias string) gen.Dao
-	Session(config *gorm.Session) IBlacklistedUsersDo
+	Session(config *gorm.Session) IBlacklistedUserDo
 	Columns(cols ...field.Expr) gen.Columns
-	Clauses(conds ...clause.Expression) IBlacklistedUsersDo
-	Not(conds ...gen.Condition) IBlacklistedUsersDo
-	Or(conds ...gen.Condition) IBlacklistedUsersDo
-	Select(conds ...field.Expr) IBlacklistedUsersDo
-	Where(conds ...gen.Condition) IBlacklistedUsersDo
-	Order(conds ...field.Expr) IBlacklistedUsersDo
-	Distinct(cols ...field.Expr) IBlacklistedUsersDo
-	Omit(cols ...field.Expr) IBlacklistedUsersDo
-	Join(table schema.Tabler, on ...field.Expr) IBlacklistedUsersDo
-	LeftJoin(table schema.Tabler, on ...field.Expr) IBlacklistedUsersDo
-	RightJoin(table schema.Tabler, on ...field.Expr) IBlacklistedUsersDo
-	Group(cols ...field.Expr) IBlacklistedUsersDo
-	Having(conds ...gen.Condition) IBlacklistedUsersDo
-	Limit(limit int) IBlacklistedUsersDo
-	Offset(offset int) IBlacklistedUsersDo
+	Clauses(conds ...clause.Expression) IBlacklistedUserDo
+	Not(conds ...gen.Condition) IBlacklistedUserDo
+	Or(conds ...gen.Condition) IBlacklistedUserDo
+	Select(conds ...field.Expr) IBlacklistedUserDo
+	Where(conds ...gen.Condition) IBlacklistedUserDo
+	Order(conds ...field.Expr) IBlacklistedUserDo
+	Distinct(cols ...field.Expr) IBlacklistedUserDo
+	Omit(cols ...field.Expr) IBlacklistedUserDo
+	Join(table schema.Tabler, on ...field.Expr) IBlacklistedUserDo
+	LeftJoin(table schema.Tabler, on ...field.Expr) IBlacklistedUserDo
+	RightJoin(table schema.Tabler, on ...field.Expr) IBlacklistedUserDo
+	Group(cols ...field.Expr) IBlacklistedUserDo
+	Having(conds ...gen.Condition) IBlacklistedUserDo
+	Limit(limit int) IBlacklistedUserDo
+	Offset(offset int) IBlacklistedUserDo
 	Count() (count int64, err error)
-	Scopes(funcs ...func(gen.Dao) gen.Dao) IBlacklistedUsersDo
-	Unscoped() IBlacklistedUsersDo
-	Create(values ...*models.BlacklistedUsers) error
-	CreateInBatches(values []*models.BlacklistedUsers, batchSize int) error
-	Save(values ...*models.BlacklistedUsers) error
-	First() (*models.BlacklistedUsers, error)
-	Take() (*models.BlacklistedUsers, error)
-	Last() (*models.BlacklistedUsers, error)
-	Find() ([]*models.BlacklistedUsers, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*models.BlacklistedUsers, err error)
-	FindInBatches(result *[]*models.BlacklistedUsers, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Scopes(funcs ...func(gen.Dao) gen.Dao) IBlacklistedUserDo
+	Unscoped() IBlacklistedUserDo
+	Create(values ...*models.BlacklistedUser) error
+	CreateInBatches(values []*models.BlacklistedUser, batchSize int) error
+	Save(values ...*models.BlacklistedUser) error
+	First() (*models.BlacklistedUser, error)
+	Take() (*models.BlacklistedUser, error)
+	Last() (*models.BlacklistedUser, error)
+	Find() ([]*models.BlacklistedUser, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*models.BlacklistedUser, err error)
+	FindInBatches(result *[]*models.BlacklistedUser, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*models.BlacklistedUsers) (info gen.ResultInfo, err error)
+	Delete(...*models.BlacklistedUser) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -155,163 +155,163 @@ type IBlacklistedUsersDo interface {
 	UpdateColumnSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	UpdateColumns(value interface{}) (info gen.ResultInfo, err error)
 	UpdateFrom(q gen.SubQuery) gen.Dao
-	Attrs(attrs ...field.AssignExpr) IBlacklistedUsersDo
-	Assign(attrs ...field.AssignExpr) IBlacklistedUsersDo
-	Joins(fields ...field.RelationField) IBlacklistedUsersDo
-	Preload(fields ...field.RelationField) IBlacklistedUsersDo
-	FirstOrInit() (*models.BlacklistedUsers, error)
-	FirstOrCreate() (*models.BlacklistedUsers, error)
-	FindByPage(offset int, limit int) (result []*models.BlacklistedUsers, count int64, err error)
+	Attrs(attrs ...field.AssignExpr) IBlacklistedUserDo
+	Assign(attrs ...field.AssignExpr) IBlacklistedUserDo
+	Joins(fields ...field.RelationField) IBlacklistedUserDo
+	Preload(fields ...field.RelationField) IBlacklistedUserDo
+	FirstOrInit() (*models.BlacklistedUser, error)
+	FirstOrCreate() (*models.BlacklistedUser, error)
+	FindByPage(offset int, limit int) (result []*models.BlacklistedUser, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
-	Returning(value interface{}, columns ...string) IBlacklistedUsersDo
+	Returning(value interface{}, columns ...string) IBlacklistedUserDo
 	UnderlyingDB() *gorm.DB
 	schema.Tabler
 }
 
-func (b blacklistedUsersDo) Debug() IBlacklistedUsersDo {
+func (b blacklistedUserDo) Debug() IBlacklistedUserDo {
 	return b.withDO(b.DO.Debug())
 }
 
-func (b blacklistedUsersDo) WithContext(ctx context.Context) IBlacklistedUsersDo {
+func (b blacklistedUserDo) WithContext(ctx context.Context) IBlacklistedUserDo {
 	return b.withDO(b.DO.WithContext(ctx))
 }
 
-func (b blacklistedUsersDo) ReadDB() IBlacklistedUsersDo {
+func (b blacklistedUserDo) ReadDB() IBlacklistedUserDo {
 	return b.Clauses(dbresolver.Read)
 }
 
-func (b blacklistedUsersDo) WriteDB() IBlacklistedUsersDo {
+func (b blacklistedUserDo) WriteDB() IBlacklistedUserDo {
 	return b.Clauses(dbresolver.Write)
 }
 
-func (b blacklistedUsersDo) Session(config *gorm.Session) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Session(config *gorm.Session) IBlacklistedUserDo {
 	return b.withDO(b.DO.Session(config))
 }
 
-func (b blacklistedUsersDo) Clauses(conds ...clause.Expression) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Clauses(conds ...clause.Expression) IBlacklistedUserDo {
 	return b.withDO(b.DO.Clauses(conds...))
 }
 
-func (b blacklistedUsersDo) Returning(value interface{}, columns ...string) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Returning(value interface{}, columns ...string) IBlacklistedUserDo {
 	return b.withDO(b.DO.Returning(value, columns...))
 }
 
-func (b blacklistedUsersDo) Not(conds ...gen.Condition) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Not(conds ...gen.Condition) IBlacklistedUserDo {
 	return b.withDO(b.DO.Not(conds...))
 }
 
-func (b blacklistedUsersDo) Or(conds ...gen.Condition) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Or(conds ...gen.Condition) IBlacklistedUserDo {
 	return b.withDO(b.DO.Or(conds...))
 }
 
-func (b blacklistedUsersDo) Select(conds ...field.Expr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Select(conds ...field.Expr) IBlacklistedUserDo {
 	return b.withDO(b.DO.Select(conds...))
 }
 
-func (b blacklistedUsersDo) Where(conds ...gen.Condition) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Where(conds ...gen.Condition) IBlacklistedUserDo {
 	return b.withDO(b.DO.Where(conds...))
 }
 
-func (b blacklistedUsersDo) Order(conds ...field.Expr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Order(conds ...field.Expr) IBlacklistedUserDo {
 	return b.withDO(b.DO.Order(conds...))
 }
 
-func (b blacklistedUsersDo) Distinct(cols ...field.Expr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Distinct(cols ...field.Expr) IBlacklistedUserDo {
 	return b.withDO(b.DO.Distinct(cols...))
 }
 
-func (b blacklistedUsersDo) Omit(cols ...field.Expr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Omit(cols ...field.Expr) IBlacklistedUserDo {
 	return b.withDO(b.DO.Omit(cols...))
 }
 
-func (b blacklistedUsersDo) Join(table schema.Tabler, on ...field.Expr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Join(table schema.Tabler, on ...field.Expr) IBlacklistedUserDo {
 	return b.withDO(b.DO.Join(table, on...))
 }
 
-func (b blacklistedUsersDo) LeftJoin(table schema.Tabler, on ...field.Expr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) LeftJoin(table schema.Tabler, on ...field.Expr) IBlacklistedUserDo {
 	return b.withDO(b.DO.LeftJoin(table, on...))
 }
 
-func (b blacklistedUsersDo) RightJoin(table schema.Tabler, on ...field.Expr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) RightJoin(table schema.Tabler, on ...field.Expr) IBlacklistedUserDo {
 	return b.withDO(b.DO.RightJoin(table, on...))
 }
 
-func (b blacklistedUsersDo) Group(cols ...field.Expr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Group(cols ...field.Expr) IBlacklistedUserDo {
 	return b.withDO(b.DO.Group(cols...))
 }
 
-func (b blacklistedUsersDo) Having(conds ...gen.Condition) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Having(conds ...gen.Condition) IBlacklistedUserDo {
 	return b.withDO(b.DO.Having(conds...))
 }
 
-func (b blacklistedUsersDo) Limit(limit int) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Limit(limit int) IBlacklistedUserDo {
 	return b.withDO(b.DO.Limit(limit))
 }
 
-func (b blacklistedUsersDo) Offset(offset int) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Offset(offset int) IBlacklistedUserDo {
 	return b.withDO(b.DO.Offset(offset))
 }
 
-func (b blacklistedUsersDo) Scopes(funcs ...func(gen.Dao) gen.Dao) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Scopes(funcs ...func(gen.Dao) gen.Dao) IBlacklistedUserDo {
 	return b.withDO(b.DO.Scopes(funcs...))
 }
 
-func (b blacklistedUsersDo) Unscoped() IBlacklistedUsersDo {
+func (b blacklistedUserDo) Unscoped() IBlacklistedUserDo {
 	return b.withDO(b.DO.Unscoped())
 }
 
-func (b blacklistedUsersDo) Create(values ...*models.BlacklistedUsers) error {
+func (b blacklistedUserDo) Create(values ...*models.BlacklistedUser) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return b.DO.Create(values)
 }
 
-func (b blacklistedUsersDo) CreateInBatches(values []*models.BlacklistedUsers, batchSize int) error {
+func (b blacklistedUserDo) CreateInBatches(values []*models.BlacklistedUser, batchSize int) error {
 	return b.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (b blacklistedUsersDo) Save(values ...*models.BlacklistedUsers) error {
+func (b blacklistedUserDo) Save(values ...*models.BlacklistedUser) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return b.DO.Save(values)
 }
 
-func (b blacklistedUsersDo) First() (*models.BlacklistedUsers, error) {
+func (b blacklistedUserDo) First() (*models.BlacklistedUser, error) {
 	if result, err := b.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.BlacklistedUsers), nil
+		return result.(*models.BlacklistedUser), nil
 	}
 }
 
-func (b blacklistedUsersDo) Take() (*models.BlacklistedUsers, error) {
+func (b blacklistedUserDo) Take() (*models.BlacklistedUser, error) {
 	if result, err := b.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.BlacklistedUsers), nil
+		return result.(*models.BlacklistedUser), nil
 	}
 }
 
-func (b blacklistedUsersDo) Last() (*models.BlacklistedUsers, error) {
+func (b blacklistedUserDo) Last() (*models.BlacklistedUser, error) {
 	if result, err := b.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.BlacklistedUsers), nil
+		return result.(*models.BlacklistedUser), nil
 	}
 }
 
-func (b blacklistedUsersDo) Find() ([]*models.BlacklistedUsers, error) {
+func (b blacklistedUserDo) Find() ([]*models.BlacklistedUser, error) {
 	result, err := b.DO.Find()
-	return result.([]*models.BlacklistedUsers), err
+	return result.([]*models.BlacklistedUser), err
 }
 
-func (b blacklistedUsersDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*models.BlacklistedUsers, err error) {
-	buf := make([]*models.BlacklistedUsers, 0, batchSize)
+func (b blacklistedUserDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*models.BlacklistedUser, err error) {
+	buf := make([]*models.BlacklistedUser, 0, batchSize)
 	err = b.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -319,49 +319,49 @@ func (b blacklistedUsersDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch
 	return results, err
 }
 
-func (b blacklistedUsersDo) FindInBatches(result *[]*models.BlacklistedUsers, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (b blacklistedUserDo) FindInBatches(result *[]*models.BlacklistedUser, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return b.DO.FindInBatches(result, batchSize, fc)
 }
 
-func (b blacklistedUsersDo) Attrs(attrs ...field.AssignExpr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Attrs(attrs ...field.AssignExpr) IBlacklistedUserDo {
 	return b.withDO(b.DO.Attrs(attrs...))
 }
 
-func (b blacklistedUsersDo) Assign(attrs ...field.AssignExpr) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Assign(attrs ...field.AssignExpr) IBlacklistedUserDo {
 	return b.withDO(b.DO.Assign(attrs...))
 }
 
-func (b blacklistedUsersDo) Joins(fields ...field.RelationField) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Joins(fields ...field.RelationField) IBlacklistedUserDo {
 	for _, _f := range fields {
 		b = *b.withDO(b.DO.Joins(_f))
 	}
 	return &b
 }
 
-func (b blacklistedUsersDo) Preload(fields ...field.RelationField) IBlacklistedUsersDo {
+func (b blacklistedUserDo) Preload(fields ...field.RelationField) IBlacklistedUserDo {
 	for _, _f := range fields {
 		b = *b.withDO(b.DO.Preload(_f))
 	}
 	return &b
 }
 
-func (b blacklistedUsersDo) FirstOrInit() (*models.BlacklistedUsers, error) {
+func (b blacklistedUserDo) FirstOrInit() (*models.BlacklistedUser, error) {
 	if result, err := b.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.BlacklistedUsers), nil
+		return result.(*models.BlacklistedUser), nil
 	}
 }
 
-func (b blacklistedUsersDo) FirstOrCreate() (*models.BlacklistedUsers, error) {
+func (b blacklistedUserDo) FirstOrCreate() (*models.BlacklistedUser, error) {
 	if result, err := b.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.BlacklistedUsers), nil
+		return result.(*models.BlacklistedUser), nil
 	}
 }
 
-func (b blacklistedUsersDo) FindByPage(offset int, limit int) (result []*models.BlacklistedUsers, count int64, err error) {
+func (b blacklistedUserDo) FindByPage(offset int, limit int) (result []*models.BlacklistedUser, count int64, err error) {
 	result, err = b.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -376,7 +376,7 @@ func (b blacklistedUsersDo) FindByPage(offset int, limit int) (result []*models.
 	return
 }
 
-func (b blacklistedUsersDo) ScanByPage(result interface{}, offset int, limit int) (count int64, err error) {
+func (b blacklistedUserDo) ScanByPage(result interface{}, offset int, limit int) (count int64, err error) {
 	count, err = b.Count()
 	if err != nil {
 		return
@@ -386,15 +386,15 @@ func (b blacklistedUsersDo) ScanByPage(result interface{}, offset int, limit int
 	return
 }
 
-func (b blacklistedUsersDo) Scan(result interface{}) (err error) {
+func (b blacklistedUserDo) Scan(result interface{}) (err error) {
 	return b.DO.Scan(result)
 }
 
-func (b blacklistedUsersDo) Delete(models ...*models.BlacklistedUsers) (result gen.ResultInfo, err error) {
+func (b blacklistedUserDo) Delete(models ...*models.BlacklistedUser) (result gen.ResultInfo, err error) {
 	return b.DO.Delete(models)
 }
 
-func (b *blacklistedUsersDo) withDO(do gen.Dao) *blacklistedUsersDo {
+func (b *blacklistedUserDo) withDO(do gen.Dao) *blacklistedUserDo {
 	b.DO = *do.(*gen.DO)
 	return b
 }

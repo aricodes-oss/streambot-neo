@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type GameSubscriptions struct {
+type GameSubscription struct {
 	gorm.Model
 	ReservationID int
 	GameID        string
@@ -12,5 +12,5 @@ type GameSubscriptions struct {
 }
 
 func init() {
-	AllModels = append(AllModels, GameSubscriptions{})
+	AllModels = append(AllModels, GameSubscription{})
 }

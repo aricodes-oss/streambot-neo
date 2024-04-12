@@ -19,28 +19,28 @@ import (
 	"streambot/models"
 )
 
-func newYoutubeSubscriptions(db *gorm.DB, opts ...gen.DOOption) youtubeSubscriptions {
-	_youtubeSubscriptions := youtubeSubscriptions{}
+func newYoutubeSubscription(db *gorm.DB, opts ...gen.DOOption) youtubeSubscription {
+	_youtubeSubscription := youtubeSubscription{}
 
-	_youtubeSubscriptions.youtubeSubscriptionsDo.UseDB(db, opts...)
-	_youtubeSubscriptions.youtubeSubscriptionsDo.UseModel(&models.YoutubeSubscriptions{})
+	_youtubeSubscription.youtubeSubscriptionDo.UseDB(db, opts...)
+	_youtubeSubscription.youtubeSubscriptionDo.UseModel(&models.YoutubeSubscription{})
 
-	tableName := _youtubeSubscriptions.youtubeSubscriptionsDo.TableName()
-	_youtubeSubscriptions.ALL = field.NewAsterisk(tableName)
-	_youtubeSubscriptions.ID = field.NewUint(tableName, "id")
-	_youtubeSubscriptions.CreatedAt = field.NewTime(tableName, "created_at")
-	_youtubeSubscriptions.UpdatedAt = field.NewTime(tableName, "updated_at")
-	_youtubeSubscriptions.DeletedAt = field.NewField(tableName, "deleted_at")
-	_youtubeSubscriptions.ReservationID = field.NewInt(tableName, "reservation_id")
-	_youtubeSubscriptions.ChannelID = field.NewString(tableName, "channel_id")
+	tableName := _youtubeSubscription.youtubeSubscriptionDo.TableName()
+	_youtubeSubscription.ALL = field.NewAsterisk(tableName)
+	_youtubeSubscription.ID = field.NewUint(tableName, "id")
+	_youtubeSubscription.CreatedAt = field.NewTime(tableName, "created_at")
+	_youtubeSubscription.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_youtubeSubscription.DeletedAt = field.NewField(tableName, "deleted_at")
+	_youtubeSubscription.ReservationID = field.NewInt(tableName, "reservation_id")
+	_youtubeSubscription.ChannelID = field.NewString(tableName, "channel_id")
 
-	_youtubeSubscriptions.fillFieldMap()
+	_youtubeSubscription.fillFieldMap()
 
-	return _youtubeSubscriptions
+	return _youtubeSubscription
 }
 
-type youtubeSubscriptions struct {
-	youtubeSubscriptionsDo
+type youtubeSubscription struct {
+	youtubeSubscriptionDo
 
 	ALL           field.Asterisk
 	ID            field.Uint
@@ -53,17 +53,17 @@ type youtubeSubscriptions struct {
 	fieldMap map[string]field.Expr
 }
 
-func (y youtubeSubscriptions) Table(newTableName string) *youtubeSubscriptions {
-	y.youtubeSubscriptionsDo.UseTable(newTableName)
+func (y youtubeSubscription) Table(newTableName string) *youtubeSubscription {
+	y.youtubeSubscriptionDo.UseTable(newTableName)
 	return y.updateTableName(newTableName)
 }
 
-func (y youtubeSubscriptions) As(alias string) *youtubeSubscriptions {
-	y.youtubeSubscriptionsDo.DO = *(y.youtubeSubscriptionsDo.As(alias).(*gen.DO))
+func (y youtubeSubscription) As(alias string) *youtubeSubscription {
+	y.youtubeSubscriptionDo.DO = *(y.youtubeSubscriptionDo.As(alias).(*gen.DO))
 	return y.updateTableName(alias)
 }
 
-func (y *youtubeSubscriptions) updateTableName(table string) *youtubeSubscriptions {
+func (y *youtubeSubscription) updateTableName(table string) *youtubeSubscription {
 	y.ALL = field.NewAsterisk(table)
 	y.ID = field.NewUint(table, "id")
 	y.CreatedAt = field.NewTime(table, "created_at")
@@ -77,7 +77,7 @@ func (y *youtubeSubscriptions) updateTableName(table string) *youtubeSubscriptio
 	return y
 }
 
-func (y *youtubeSubscriptions) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
+func (y *youtubeSubscription) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 	_f, ok := y.fieldMap[fieldName]
 	if !ok || _f == nil {
 		return nil, false
@@ -86,7 +86,7 @@ func (y *youtubeSubscriptions) GetFieldByName(fieldName string) (field.OrderExpr
 	return _oe, ok
 }
 
-func (y *youtubeSubscriptions) fillFieldMap() {
+func (y *youtubeSubscription) fillFieldMap() {
 	y.fieldMap = make(map[string]field.Expr, 6)
 	y.fieldMap["id"] = y.ID
 	y.fieldMap["created_at"] = y.CreatedAt
@@ -96,58 +96,58 @@ func (y *youtubeSubscriptions) fillFieldMap() {
 	y.fieldMap["channel_id"] = y.ChannelID
 }
 
-func (y youtubeSubscriptions) clone(db *gorm.DB) youtubeSubscriptions {
-	y.youtubeSubscriptionsDo.ReplaceConnPool(db.Statement.ConnPool)
+func (y youtubeSubscription) clone(db *gorm.DB) youtubeSubscription {
+	y.youtubeSubscriptionDo.ReplaceConnPool(db.Statement.ConnPool)
 	return y
 }
 
-func (y youtubeSubscriptions) replaceDB(db *gorm.DB) youtubeSubscriptions {
-	y.youtubeSubscriptionsDo.ReplaceDB(db)
+func (y youtubeSubscription) replaceDB(db *gorm.DB) youtubeSubscription {
+	y.youtubeSubscriptionDo.ReplaceDB(db)
 	return y
 }
 
-type youtubeSubscriptionsDo struct{ gen.DO }
+type youtubeSubscriptionDo struct{ gen.DO }
 
-type IYoutubeSubscriptionsDo interface {
+type IYoutubeSubscriptionDo interface {
 	gen.SubQuery
-	Debug() IYoutubeSubscriptionsDo
-	WithContext(ctx context.Context) IYoutubeSubscriptionsDo
+	Debug() IYoutubeSubscriptionDo
+	WithContext(ctx context.Context) IYoutubeSubscriptionDo
 	WithResult(fc func(tx gen.Dao)) gen.ResultInfo
 	ReplaceDB(db *gorm.DB)
-	ReadDB() IYoutubeSubscriptionsDo
-	WriteDB() IYoutubeSubscriptionsDo
+	ReadDB() IYoutubeSubscriptionDo
+	WriteDB() IYoutubeSubscriptionDo
 	As(alias string) gen.Dao
-	Session(config *gorm.Session) IYoutubeSubscriptionsDo
+	Session(config *gorm.Session) IYoutubeSubscriptionDo
 	Columns(cols ...field.Expr) gen.Columns
-	Clauses(conds ...clause.Expression) IYoutubeSubscriptionsDo
-	Not(conds ...gen.Condition) IYoutubeSubscriptionsDo
-	Or(conds ...gen.Condition) IYoutubeSubscriptionsDo
-	Select(conds ...field.Expr) IYoutubeSubscriptionsDo
-	Where(conds ...gen.Condition) IYoutubeSubscriptionsDo
-	Order(conds ...field.Expr) IYoutubeSubscriptionsDo
-	Distinct(cols ...field.Expr) IYoutubeSubscriptionsDo
-	Omit(cols ...field.Expr) IYoutubeSubscriptionsDo
-	Join(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionsDo
-	LeftJoin(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionsDo
-	RightJoin(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionsDo
-	Group(cols ...field.Expr) IYoutubeSubscriptionsDo
-	Having(conds ...gen.Condition) IYoutubeSubscriptionsDo
-	Limit(limit int) IYoutubeSubscriptionsDo
-	Offset(offset int) IYoutubeSubscriptionsDo
+	Clauses(conds ...clause.Expression) IYoutubeSubscriptionDo
+	Not(conds ...gen.Condition) IYoutubeSubscriptionDo
+	Or(conds ...gen.Condition) IYoutubeSubscriptionDo
+	Select(conds ...field.Expr) IYoutubeSubscriptionDo
+	Where(conds ...gen.Condition) IYoutubeSubscriptionDo
+	Order(conds ...field.Expr) IYoutubeSubscriptionDo
+	Distinct(cols ...field.Expr) IYoutubeSubscriptionDo
+	Omit(cols ...field.Expr) IYoutubeSubscriptionDo
+	Join(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionDo
+	LeftJoin(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionDo
+	RightJoin(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionDo
+	Group(cols ...field.Expr) IYoutubeSubscriptionDo
+	Having(conds ...gen.Condition) IYoutubeSubscriptionDo
+	Limit(limit int) IYoutubeSubscriptionDo
+	Offset(offset int) IYoutubeSubscriptionDo
 	Count() (count int64, err error)
-	Scopes(funcs ...func(gen.Dao) gen.Dao) IYoutubeSubscriptionsDo
-	Unscoped() IYoutubeSubscriptionsDo
-	Create(values ...*models.YoutubeSubscriptions) error
-	CreateInBatches(values []*models.YoutubeSubscriptions, batchSize int) error
-	Save(values ...*models.YoutubeSubscriptions) error
-	First() (*models.YoutubeSubscriptions, error)
-	Take() (*models.YoutubeSubscriptions, error)
-	Last() (*models.YoutubeSubscriptions, error)
-	Find() ([]*models.YoutubeSubscriptions, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*models.YoutubeSubscriptions, err error)
-	FindInBatches(result *[]*models.YoutubeSubscriptions, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Scopes(funcs ...func(gen.Dao) gen.Dao) IYoutubeSubscriptionDo
+	Unscoped() IYoutubeSubscriptionDo
+	Create(values ...*models.YoutubeSubscription) error
+	CreateInBatches(values []*models.YoutubeSubscription, batchSize int) error
+	Save(values ...*models.YoutubeSubscription) error
+	First() (*models.YoutubeSubscription, error)
+	Take() (*models.YoutubeSubscription, error)
+	Last() (*models.YoutubeSubscription, error)
+	Find() ([]*models.YoutubeSubscription, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*models.YoutubeSubscription, err error)
+	FindInBatches(result *[]*models.YoutubeSubscription, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*models.YoutubeSubscriptions) (info gen.ResultInfo, err error)
+	Delete(...*models.YoutubeSubscription) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -155,163 +155,163 @@ type IYoutubeSubscriptionsDo interface {
 	UpdateColumnSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	UpdateColumns(value interface{}) (info gen.ResultInfo, err error)
 	UpdateFrom(q gen.SubQuery) gen.Dao
-	Attrs(attrs ...field.AssignExpr) IYoutubeSubscriptionsDo
-	Assign(attrs ...field.AssignExpr) IYoutubeSubscriptionsDo
-	Joins(fields ...field.RelationField) IYoutubeSubscriptionsDo
-	Preload(fields ...field.RelationField) IYoutubeSubscriptionsDo
-	FirstOrInit() (*models.YoutubeSubscriptions, error)
-	FirstOrCreate() (*models.YoutubeSubscriptions, error)
-	FindByPage(offset int, limit int) (result []*models.YoutubeSubscriptions, count int64, err error)
+	Attrs(attrs ...field.AssignExpr) IYoutubeSubscriptionDo
+	Assign(attrs ...field.AssignExpr) IYoutubeSubscriptionDo
+	Joins(fields ...field.RelationField) IYoutubeSubscriptionDo
+	Preload(fields ...field.RelationField) IYoutubeSubscriptionDo
+	FirstOrInit() (*models.YoutubeSubscription, error)
+	FirstOrCreate() (*models.YoutubeSubscription, error)
+	FindByPage(offset int, limit int) (result []*models.YoutubeSubscription, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
-	Returning(value interface{}, columns ...string) IYoutubeSubscriptionsDo
+	Returning(value interface{}, columns ...string) IYoutubeSubscriptionDo
 	UnderlyingDB() *gorm.DB
 	schema.Tabler
 }
 
-func (y youtubeSubscriptionsDo) Debug() IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Debug() IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Debug())
 }
 
-func (y youtubeSubscriptionsDo) WithContext(ctx context.Context) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) WithContext(ctx context.Context) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.WithContext(ctx))
 }
 
-func (y youtubeSubscriptionsDo) ReadDB() IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) ReadDB() IYoutubeSubscriptionDo {
 	return y.Clauses(dbresolver.Read)
 }
 
-func (y youtubeSubscriptionsDo) WriteDB() IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) WriteDB() IYoutubeSubscriptionDo {
 	return y.Clauses(dbresolver.Write)
 }
 
-func (y youtubeSubscriptionsDo) Session(config *gorm.Session) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Session(config *gorm.Session) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Session(config))
 }
 
-func (y youtubeSubscriptionsDo) Clauses(conds ...clause.Expression) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Clauses(conds ...clause.Expression) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Clauses(conds...))
 }
 
-func (y youtubeSubscriptionsDo) Returning(value interface{}, columns ...string) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Returning(value interface{}, columns ...string) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Returning(value, columns...))
 }
 
-func (y youtubeSubscriptionsDo) Not(conds ...gen.Condition) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Not(conds ...gen.Condition) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Not(conds...))
 }
 
-func (y youtubeSubscriptionsDo) Or(conds ...gen.Condition) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Or(conds ...gen.Condition) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Or(conds...))
 }
 
-func (y youtubeSubscriptionsDo) Select(conds ...field.Expr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Select(conds ...field.Expr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Select(conds...))
 }
 
-func (y youtubeSubscriptionsDo) Where(conds ...gen.Condition) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Where(conds ...gen.Condition) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Where(conds...))
 }
 
-func (y youtubeSubscriptionsDo) Order(conds ...field.Expr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Order(conds ...field.Expr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Order(conds...))
 }
 
-func (y youtubeSubscriptionsDo) Distinct(cols ...field.Expr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Distinct(cols ...field.Expr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Distinct(cols...))
 }
 
-func (y youtubeSubscriptionsDo) Omit(cols ...field.Expr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Omit(cols ...field.Expr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Omit(cols...))
 }
 
-func (y youtubeSubscriptionsDo) Join(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Join(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Join(table, on...))
 }
 
-func (y youtubeSubscriptionsDo) LeftJoin(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) LeftJoin(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.LeftJoin(table, on...))
 }
 
-func (y youtubeSubscriptionsDo) RightJoin(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) RightJoin(table schema.Tabler, on ...field.Expr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.RightJoin(table, on...))
 }
 
-func (y youtubeSubscriptionsDo) Group(cols ...field.Expr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Group(cols ...field.Expr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Group(cols...))
 }
 
-func (y youtubeSubscriptionsDo) Having(conds ...gen.Condition) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Having(conds ...gen.Condition) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Having(conds...))
 }
 
-func (y youtubeSubscriptionsDo) Limit(limit int) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Limit(limit int) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Limit(limit))
 }
 
-func (y youtubeSubscriptionsDo) Offset(offset int) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Offset(offset int) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Offset(offset))
 }
 
-func (y youtubeSubscriptionsDo) Scopes(funcs ...func(gen.Dao) gen.Dao) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Scopes(funcs ...func(gen.Dao) gen.Dao) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Scopes(funcs...))
 }
 
-func (y youtubeSubscriptionsDo) Unscoped() IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Unscoped() IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Unscoped())
 }
 
-func (y youtubeSubscriptionsDo) Create(values ...*models.YoutubeSubscriptions) error {
+func (y youtubeSubscriptionDo) Create(values ...*models.YoutubeSubscription) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return y.DO.Create(values)
 }
 
-func (y youtubeSubscriptionsDo) CreateInBatches(values []*models.YoutubeSubscriptions, batchSize int) error {
+func (y youtubeSubscriptionDo) CreateInBatches(values []*models.YoutubeSubscription, batchSize int) error {
 	return y.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (y youtubeSubscriptionsDo) Save(values ...*models.YoutubeSubscriptions) error {
+func (y youtubeSubscriptionDo) Save(values ...*models.YoutubeSubscription) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return y.DO.Save(values)
 }
 
-func (y youtubeSubscriptionsDo) First() (*models.YoutubeSubscriptions, error) {
+func (y youtubeSubscriptionDo) First() (*models.YoutubeSubscription, error) {
 	if result, err := y.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.YoutubeSubscriptions), nil
+		return result.(*models.YoutubeSubscription), nil
 	}
 }
 
-func (y youtubeSubscriptionsDo) Take() (*models.YoutubeSubscriptions, error) {
+func (y youtubeSubscriptionDo) Take() (*models.YoutubeSubscription, error) {
 	if result, err := y.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.YoutubeSubscriptions), nil
+		return result.(*models.YoutubeSubscription), nil
 	}
 }
 
-func (y youtubeSubscriptionsDo) Last() (*models.YoutubeSubscriptions, error) {
+func (y youtubeSubscriptionDo) Last() (*models.YoutubeSubscription, error) {
 	if result, err := y.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.YoutubeSubscriptions), nil
+		return result.(*models.YoutubeSubscription), nil
 	}
 }
 
-func (y youtubeSubscriptionsDo) Find() ([]*models.YoutubeSubscriptions, error) {
+func (y youtubeSubscriptionDo) Find() ([]*models.YoutubeSubscription, error) {
 	result, err := y.DO.Find()
-	return result.([]*models.YoutubeSubscriptions), err
+	return result.([]*models.YoutubeSubscription), err
 }
 
-func (y youtubeSubscriptionsDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*models.YoutubeSubscriptions, err error) {
-	buf := make([]*models.YoutubeSubscriptions, 0, batchSize)
+func (y youtubeSubscriptionDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*models.YoutubeSubscription, err error) {
+	buf := make([]*models.YoutubeSubscription, 0, batchSize)
 	err = y.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -319,49 +319,49 @@ func (y youtubeSubscriptionsDo) FindInBatch(batchSize int, fc func(tx gen.Dao, b
 	return results, err
 }
 
-func (y youtubeSubscriptionsDo) FindInBatches(result *[]*models.YoutubeSubscriptions, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (y youtubeSubscriptionDo) FindInBatches(result *[]*models.YoutubeSubscription, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return y.DO.FindInBatches(result, batchSize, fc)
 }
 
-func (y youtubeSubscriptionsDo) Attrs(attrs ...field.AssignExpr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Attrs(attrs ...field.AssignExpr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Attrs(attrs...))
 }
 
-func (y youtubeSubscriptionsDo) Assign(attrs ...field.AssignExpr) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Assign(attrs ...field.AssignExpr) IYoutubeSubscriptionDo {
 	return y.withDO(y.DO.Assign(attrs...))
 }
 
-func (y youtubeSubscriptionsDo) Joins(fields ...field.RelationField) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Joins(fields ...field.RelationField) IYoutubeSubscriptionDo {
 	for _, _f := range fields {
 		y = *y.withDO(y.DO.Joins(_f))
 	}
 	return &y
 }
 
-func (y youtubeSubscriptionsDo) Preload(fields ...field.RelationField) IYoutubeSubscriptionsDo {
+func (y youtubeSubscriptionDo) Preload(fields ...field.RelationField) IYoutubeSubscriptionDo {
 	for _, _f := range fields {
 		y = *y.withDO(y.DO.Preload(_f))
 	}
 	return &y
 }
 
-func (y youtubeSubscriptionsDo) FirstOrInit() (*models.YoutubeSubscriptions, error) {
+func (y youtubeSubscriptionDo) FirstOrInit() (*models.YoutubeSubscription, error) {
 	if result, err := y.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.YoutubeSubscriptions), nil
+		return result.(*models.YoutubeSubscription), nil
 	}
 }
 
-func (y youtubeSubscriptionsDo) FirstOrCreate() (*models.YoutubeSubscriptions, error) {
+func (y youtubeSubscriptionDo) FirstOrCreate() (*models.YoutubeSubscription, error) {
 	if result, err := y.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*models.YoutubeSubscriptions), nil
+		return result.(*models.YoutubeSubscription), nil
 	}
 }
 
-func (y youtubeSubscriptionsDo) FindByPage(offset int, limit int) (result []*models.YoutubeSubscriptions, count int64, err error) {
+func (y youtubeSubscriptionDo) FindByPage(offset int, limit int) (result []*models.YoutubeSubscription, count int64, err error) {
 	result, err = y.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -376,7 +376,7 @@ func (y youtubeSubscriptionsDo) FindByPage(offset int, limit int) (result []*mod
 	return
 }
 
-func (y youtubeSubscriptionsDo) ScanByPage(result interface{}, offset int, limit int) (count int64, err error) {
+func (y youtubeSubscriptionDo) ScanByPage(result interface{}, offset int, limit int) (count int64, err error) {
 	count, err = y.Count()
 	if err != nil {
 		return
@@ -386,15 +386,15 @@ func (y youtubeSubscriptionsDo) ScanByPage(result interface{}, offset int, limit
 	return
 }
 
-func (y youtubeSubscriptionsDo) Scan(result interface{}) (err error) {
+func (y youtubeSubscriptionDo) Scan(result interface{}) (err error) {
 	return y.DO.Scan(result)
 }
 
-func (y youtubeSubscriptionsDo) Delete(models ...*models.YoutubeSubscriptions) (result gen.ResultInfo, err error) {
+func (y youtubeSubscriptionDo) Delete(models ...*models.YoutubeSubscription) (result gen.ResultInfo, err error) {
 	return y.DO.Delete(models)
 }
 
-func (y *youtubeSubscriptionsDo) withDO(do gen.Dao) *youtubeSubscriptionsDo {
+func (y *youtubeSubscriptionDo) withDO(do gen.Dao) *youtubeSubscriptionDo {
 	y.DO = *do.(*gen.DO)
 	return y
 }

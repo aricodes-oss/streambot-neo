@@ -4,12 +4,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type YoutubeSubscriptions struct {
+type YoutubeSubscription struct {
 	gorm.Model
 	ReservationID int
 	ChannelID     string
 }
 
 func init() {
-	AllModels = append(AllModels, YoutubeSubscriptions{})
+	AllModels = append(AllModels, YoutubeSubscription{})
 }
